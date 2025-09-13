@@ -1,0 +1,190 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  font-family: "Courier New", monospace;
+  font-weight: 600;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+:root {
+  --color-primary: #222; /* background */
+  --color-dark: #111; /* background undertone */
+  --color-light: #555; /* hover and directives background */
+  --color-white: #edece6; /* text color */
+  --color-accent: #00b87b; /* button color */
+  --color-tint: #00ffaa; /* active color */
+  --color-shadow: rgba(0, 184, 122, 0.3); /* surface border */
+  --color-shadow-dark: rgba(0, 0, 0, 0.3);
+
+  --transition: all 400ms ease;
+  --magnify-effect: scale(1.05);
+
+  /* react-toastify theme alignment (preserve) */
+  --toastify-icon-color-success: var(--color-accent) !important;
+  --toastify-color-progress-success: var(--color-tint) !important;
+  --toastify-color-success: var(--color-accent) !important;
+}
+
+/* Improves text rendering on macOS/Win */
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-primary);
+  color: var(--color-white); /* ensure readable text on dark bg */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+p {
+  line-height: 2rem;
+  font-size: 1.1rem;
+  margin: 0 0 1rem;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  margin: 0 0 0.75rem;
+  color: var(--color-white); /* keep contrast on dark bg */
+}
+
+a {
+  color: var(--color-accent);
+  text-decoration: none;
+  transition: var(--transition);
+}
+
+a:hover {
+  color: var(--color-tint);
+}
+
+a:focus-visible {
+  outline: 2px solid var(--color-tint);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Text selection looks on-brand */
+::selection {
+  background: var(--color-shadow);
+  color: var(--color-white);
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background-color: var(--color-shadow);
+}
+::-webkit-scrollbar-thumb:hover {
+  background-color: var(--color-accent);
+}
+::-webkit-scrollbar-track {
+  background-color: var(--color-light);
+}
+::-webkit-scrollbar-thumb:active {
+  background-color: var(--color-accent);
+}
+
+.button-container {
+  display: flex;
+  align-items: center;
+  margin-top: 0.625rem;
+  gap: 0.5rem; /* small spacing for multiple buttons */
+}
+
+.primary-button {
+  margin: 0.5rem 0;
+  padding: 0.75rem 1.5rem;
+  color: var(--color-primary);
+  background-color: var(--color-accent);
+  border-radius: 0.3rem;
+  font-size: 1.1rem;
+  border: none;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.primary-button:active {
+  transform: var(--magnify-effect);
+}
+
+.primary-button:focus-visible {
+  outline: 2px solid var(--color-tint);
+  outline-offset: 2px;
+}
+
+.primary-button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
+/* ---------- Motion preferences ---------- */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation: none !important;
+    transition: none !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* NavSwitcher breakpoint */
+@media screen and (min-width: 1281px) {
+  .primary-button:hover {
+    background-color: var(--color-tint);
+    transition: var(--transition);
+  }
+}
+
+@media screen and (max-width: 1280px) {
+  .primary-button:active {
+    background-color: var(--color-tint);
+  }
+}
+
+@media screen and (max-width: 400px) {
+  p {
+    line-height: 1.9rem;
+    font-size: 0.9rem;
+  }
+  h2 {
+    font-size: 1rem;
+  }
+  .primary-button {
+    font-size: 1rem;
+  }
+}
+
+@media screen and (max-width: 350px) {
+  p {
+    font-size: 0.8rem;
+  }
+  h2 {
+    font-size: 1rem;
+  }
+  .primary-button {
+    font-size: 0.9rem;
+    padding: 0.5rem 1rem;
+  }
+}
+
+.visually-hidden {
+  position: absolute !important;
+  height: 1px;
+  width: 1px;
+  overflow: hidden;
+  clip: rect(1px, 1px, 1px, 1px);
+  white-space: nowrap;
+}

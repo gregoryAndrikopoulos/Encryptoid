@@ -36,7 +36,7 @@ export default [
 
   // Vitest component/unit tests under src
   {
-    files: ["src/**/*.{test,spec}.{js,jsx}", "src/**/__tests__/**/*.{js,jsx}"],
+    files: ["src/**/*.{test,spec}.{js,jsx}", "src/**/tests/**/*.{js,jsx}"],
     languageOptions: {
       globals: {
         ...globals.browser,
