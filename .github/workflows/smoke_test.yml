@@ -1,0 +1,65 @@
+name: Smoke
+
+on:
+#  pull_request:
+#    branches: [main]
+  workflow_dispatch:
+
+# Avoid overlapping runs
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: 📦 Checkout
+        uses: actions/checkout@v5
+
+      - name: 🔧 Install tools from .tool-versions (Node & pnpm)
+        uses: asdf-vm/actions/install@v4
+
+      - name: 🗃️ Cache pnpm store
+        uses: actions/cache@v4
+        with:
+          path: ~/.local/share/pnpm/store
+          key: pnpm-store-${{ runner.os }}-${{ hashFiles('pnpm-lock.yaml') }}
+          restore-keys: |
+            pnpm-store-${{ runner.os }}-
+
+      - name: ⚙️ Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: 🔬 Unit tests (Vitest)
+        run: pnpm test:unit
+
+      - name: 🏗️ Build app
+        run: pnpm build
+
+      - name: 🚀 Start preview (background)
+        run: pnpm preview -- --port 4173 --strictPort &
+
+      - name: ⏳ Wait for server
+        shell: bash
+        run: |
+          set -euo pipefail
+          for i in {1..40}; do
+            if curl -sSf http://localhost:4173 >/dev/null; then
+              echo "Server is up."
+              exit 0
+            fi
+            echo "Waiting for server... ($i/40)"
+            sleep 1
+          done
+          echo "Server failed to start in time" >&2
+          exit 1
+
+      - name: 🧪 Run Tests
+        env:
+          CI: true
+          WDIO_BASEURL: http://localhost:4173
+          FORCE_COLOR: "3"
+        run: pnpm test:smoke

@@ -1,0 +1,14 @@
+.header {
+  display: grid;
+  place-items: center;
+  padding: clamp(0.75rem, 2vw, 1rem);
+}
+
+.logo {
+  display: block;
+  height: auto;
+  margin: 0 auto;
+  width: clamp(140px, 32vw, 320px);
+  user-select: none;
+  -webkit-user-drag: none;
+}
