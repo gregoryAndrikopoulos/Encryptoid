@@ -8,7 +8,7 @@ and optimized builds.
 
 ## Workflow Status
 
-[![Smoke Tests](https://github.com/gregoryAndrikopoulos/encryptoid/actions/workflows/smoke.yml/badge.svg)](https://github.com/gregoryAndrikopoulos/encryptoid/actions/workflows/smoke.yml)
+[![Smoke Tests](https://github.com/gregoryAndrikopoulos/encryptoid/actions/workflows/smoke_test.yml/badge.svg)](https://github.com/gregoryAndrikopoulos/encryptoid/actions/workflows/smoke_test.yml)
 
 ---
 
