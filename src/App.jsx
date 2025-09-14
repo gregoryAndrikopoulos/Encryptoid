@@ -1,14 +1,19 @@
 import Header from "./components/header/Header";
 import Footer from "./components/footer/Footer";
 import NavSwitcher from "./components/navigation/shared/NavSwitcher.jsx";
-import { Routes } from "react-router-dom";
+import Encryption from "./components/pages/encryption-decryption/components/Encryption.jsx";
+import Decryption from "./components/pages/encryption-decryption/components/Decryption.jsx";
+import { Route, Routes } from "react-router-dom";
 
 const App = () => {
   return (
     <main>
       <Header />
       <NavSwitcher />
-      <Routes></Routes>
+      <Routes>
+        <Route path="/encryption" element={<Encryption />} />
+        <Route path="/decryption" element={<Decryption />} />
+      </Routes>
       <Footer />
     </main>
   );
