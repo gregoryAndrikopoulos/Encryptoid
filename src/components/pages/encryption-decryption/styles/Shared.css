@@ -1,0 +1,246 @@
+.encryption,
+.decryption {
+  margin: 5rem auto 2rem;
+  max-width: 50rem;
+  padding: 1.9rem;
+  background-color: var(--color-primary);
+  box-shadow: 0 0 1rem var(--color-shadow);
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch; /* stretch internal blocks to full width */
+  justify-content: flex-start;
+  position: relative;
+  min-height: 91.5vh;
+}
+
+/* Headings */
+.encryption h2,
+.decryption h2 {
+  text-align: center;
+  color: var(--color-accent);
+  margin: 0 0 2rem;
+}
+
+/* Intro text */
+.directive {
+  margin-bottom: 2.5rem;
+  color: var(--color-accent);
+  text-align: justify;
+}
+
+.dropzone {
+  border: 2px dashed var(--color-accent);
+  border-radius: 0.75rem;
+  padding: 2rem 10rem;
+  cursor: pointer;
+  outline: none;
+  background-color: var(--color-primary);
+  transition: var(--transition);
+  text-align: center;
+  margin-bottom: 2rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  user-select: none;
+}
+
+.dropzone:hover {
+  border-color: var(--color-tint);
+  transform: translateY(-2px);
+}
+
+.dropzone:focus-visible {
+  outline: 2px solid var(--color-tint);
+  outline-offset: 2px;
+}
+
+.dropzone--active {
+  border-color: var(--color-tint);
+  background: rgba(0, 255, 170, 0.06);
+}
+
+.dropzone-icon {
+  color: var(--color-accent);
+}
+
+.dropzone-hint {
+  color: var(--color-white);
+  margin: 0;
+  text-align: center;
+}
+
+.dropzone-subhint {
+  color: var(--color-accent);
+  opacity: 0.85;
+}
+
+.security-key-form {
+  background-color: var(--color-primary);
+  padding: 1.25rem;
+  box-shadow: 0 0 0.65rem var(--color-shadow);
+  border-radius: 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  align-items: stretch;
+  position: relative;
+  margin-bottom: 1.5rem;
+}
+
+.security-key-form p,
+.security-key-label {
+  color: var(--color-accent);
+  margin: 0 0 0.25rem;
+}
+
+.security-key-field {
+  position: relative; /* anchor the eye button to this field */
+  width: 100%;
+}
+
+.security-key {
+  width: 100%;
+  padding: 0.75rem 2.5rem 0.75rem 0.75rem; /* room for eye button */
+  border: 0.125rem solid var(--color-accent);
+  border-radius: 0.38rem;
+  font-size: 1.15rem;
+  text-align: left;
+  color: var(--color-accent);
+  background-color: var(--color-primary);
+  outline: none;
+  transition: var(--transition);
+}
+.security-key:focus-visible {
+  outline: 2px solid var(--color-tint);
+  outline-offset: 2px;
+}
+
+.mask-toggle-button {
+  position: absolute;
+  right: 0.6rem;
+  top: 50%;
+  transform: translateY(-50%);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  color: var(--color-accent);
+  font-size: 1.2rem;
+  padding: 0.25rem;
+}
+
+.encryption-results,
+.decryption-results {
+  margin-top: 1rem;
+  display: grid;
+  gap: 1rem;
+}
+
+.token-block {
+  background: rgba(0, 0, 0, 0.08);
+  border: 1px solid var(--color-shadow);
+  border-radius: 0.5rem;
+  padding: 1rem;
+}
+
+.token-block p {
+  margin: 0 0 0.5rem;
+  color: var(--color-accent);
+}
+
+.token-output {
+  width: 100%;
+  padding: 0.6rem 0.75rem;
+  border: 1px dashed var(--color-shadow);
+  border-radius: 0.38rem;
+  background: var(--color-primary);
+  color: var(--color-white);
+  margin-bottom: 0.75rem;
+}
+
+.encryption .Toastify__toast {
+  background-color: var(--color-dark) !important;
+  color: var(--color-accent) !important;
+}
+.Toastify__close-button {
+  color: var(--color-tint) !important;
+}
+.Toastify__close-button:hover {
+  color: var(--color-dark) !important;
+}
+
+.flow-sm {
+  display: grid;
+  gap: 0.75rem;
+}
+.flow-md {
+  display: grid;
+  gap: 1.25rem;
+}
+.flow-lg {
+  display: grid;
+  gap: 1.75rem;
+}
+
+[data-testid$=".dropzone.wrap"] {
+  display: grid;
+  gap: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.decryption .security-key-form {
+  margin-top: 0.5rem;
+}
+
+@media (max-width: 1280px) {
+  .encryption,
+  .decryption {
+    margin: 2rem auto 5rem; /* room for mobile bottom nav */
+    padding-bottom: 4.5rem;
+  }
+}
+
+@media (max-width: 850px) {
+  .encryption,
+  .decryption {
+    width: 90%;
+  }
+  .encryption h2,
+  .decryption h2 {
+    margin-bottom: 1rem;
+  }
+}
+
+@media (max-width: 600px) {
+  .encryption h2,
+  .decryption h2 {
+    font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 400px) {
+  .encryption h2,
+  .decryption h2 {
+    font-size: 1rem;
+  }
+  .directive {
+    font-size: 1rem;
+  }
+  .security-key-form {
+    padding-left: 0.75rem; /* replace invalid negative paddings */
+    padding-right: 0.75rem;
+  }
+}
+
+@media (max-width: 352px) {
+  .security-key-form p {
+    display: none;
+  }
+}
+
+@media (max-width: 350px) {
+  .mask-toggle-button {
+    font-size: 1.1rem;
+  }
+}

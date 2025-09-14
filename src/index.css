@@ -17,24 +17,33 @@ html {
   --color-white: #edece6; /* text color */
   --color-accent: #00b87b; /* button color */
   --color-tint: #00ffaa; /* active color */
-  --color-shadow: rgba(0, 184, 122, 0.3); /* surface border */
+  --color-shadow: rgba(0, 184, 122, 0.3); /* surface border / glow */
   --color-shadow-dark: rgba(0, 0, 0, 0.3);
 
   --transition: all 400ms ease;
   --magnify-effect: scale(1.05);
 
-  /* react-toastify theme alignment (preserve) */
-  --toastify-icon-color-success: var(--color-accent) !important;
-  --toastify-color-progress-success: var(--color-tint) !important;
-  --toastify-color-success: var(--color-accent) !important;
+  --toastify-icon-color-success: var(--color-accent);
+  --toastify-color-progress-success: var(--color-tint);
+  --toastify-color-success: var(--color-accent);
 }
 
-/* Improves text rendering on macOS/Win */
 body {
   margin: 0;
   padding: 0;
-  background-color: var(--color-primary);
-  color: var(--color-white); /* ensure readable text on dark bg */
+  color: var(--color-white);
+  background:
+    radial-gradient(
+      1200px 600px at 10% -10%,
+      rgba(0, 184, 122, 0.07),
+      transparent 40%
+    ),
+    radial-gradient(
+      900px 500px at 100% 0%,
+      rgba(0, 255, 170, 0.06),
+      transparent 45%
+    ),
+    var(--color-primary);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -50,7 +59,7 @@ h2,
 h3,
 h4 {
   margin: 0 0 0.75rem;
-  color: var(--color-white); /* keep contrast on dark bg */
+  color: var(--color-white);
 }
 
 a {
@@ -66,10 +75,9 @@ a:hover {
 a:focus-visible {
   outline: 2px solid var(--color-tint);
   outline-offset: 2px;
-  border-radius: 4px;
+  border-radius: 6px;
 }
 
-/* Text selection looks on-brand */
 ::selection {
   background: var(--color-shadow);
   color: var(--color-white);
@@ -94,8 +102,8 @@ a:focus-visible {
 .button-container {
   display: flex;
   align-items: center;
+  gap: 0.5rem;
   margin-top: 0.625rem;
-  gap: 0.5rem; /* small spacing for multiple buttons */
 }
 
 .primary-button {
@@ -103,11 +111,16 @@ a:focus-visible {
   padding: 0.75rem 1.5rem;
   color: var(--color-primary);
   background-color: var(--color-accent);
-  border-radius: 0.3rem;
-  font-size: 1.1rem;
   border: none;
+  border-radius: 12px;
+  font-size: 1.1rem;
   cursor: pointer;
   transition: var(--transition);
+  box-shadow: 0 6px 18px -10px var(--color-shadow);
+}
+
+.primary-button:hover:not(:disabled) {
+  filter: saturate(1.05);
 }
 
 .primary-button:active {
@@ -125,13 +138,6 @@ a:focus-visible {
   transform: none;
 }
 
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 1rem;
-}
-
-/* ---------- Motion preferences ---------- */
 @media (prefers-reduced-motion: reduce) {
   * {
     animation: none !important;
@@ -140,11 +146,9 @@ a:focus-visible {
   }
 }
 
-/* NavSwitcher breakpoint */
 @media screen and (min-width: 1281px) {
   .primary-button:hover {
     background-color: var(--color-tint);
-    transition: var(--transition);
   }
 }
 
@@ -178,13 +182,4 @@ a:focus-visible {
     font-size: 0.9rem;
     padding: 0.5rem 1rem;
   }
-}
-
-.visually-hidden {
-  position: absolute !important;
-  height: 1px;
-  width: 1px;
-  overflow: hidden;
-  clip: rect(1px, 1px, 1px, 1px);
-  white-space: nowrap;
 }
