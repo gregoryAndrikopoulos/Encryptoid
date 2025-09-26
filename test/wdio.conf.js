@@ -27,8 +27,6 @@ export const config = {
       browserName: "chrome",
       "goog:chromeOptions": {
         args: [
-          "--window-size=1920,1080",
-          "--window-position=0,0",
           "--no-sandbox",
           "--disable-dev-shm-usage",
           "--no-default-browser-check",
@@ -57,13 +55,20 @@ export const config = {
   },
 
   before: async function () {
+    // Ensure a page exists before injecting mocks
+    try {
+      await browser.url("/");
+    } catch {
+      // ignore – baseUrl might not be reachable yet; page will exist after first .url() call
+    }
+
+    // graceful cleanup on signals
     let cleaned = false;
     const closeSession = async (reason) => {
       if (cleaned) return;
       cleaned = true;
       try {
         if (browser?.sessionId) {
-          // Avoid hanging if the Grid/Node is already gone
           const timeout = new Promise((res) => setTimeout(res, 3000));
           const attempt = browser.deleteSession().catch((e) => {
             const msg = String(e?.message || e);
