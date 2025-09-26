@@ -1,7 +1,8 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Dropzone from "./Dropzone.jsx";
 import "../styles/Shared.css";
 import { validateTxtFile } from "../utils/validation.js";
+import { encryptFile } from "../../../../services/encryption.js";
 
 const TOKEN_LEN = 256;
 
@@ -10,34 +11,75 @@ const Encryption = () => {
   const [status, setStatus] = useState("idle"); // "idle" | "processing" | "done"
   const [dropError, setDropError] = useState("");
 
+  // hold token + downloadable encrypted file
+  const [token, setToken] = useState("");
+  const [encDownloadUrl, setEncDownloadUrl] = useState("");
+  const [encFilename, setEncFilename] = useState("");
+
+  // revoke object URL when replaced/cleared
+  useEffect(() => {
+    return () => {
+      if (encDownloadUrl) URL.revokeObjectURL(encDownloadUrl);
+    };
+  }, [encDownloadUrl]);
+
   const onDropRejected = useCallback(() => {
     setFile(null);
     setStatus("idle");
     setDropError("Only .txt files are supported");
   }, []);
 
-  const onDrop = useCallback(async (acceptedFiles) => {
-    const f = acceptedFiles?.[0];
-    setDropError("");
-    if (!f) return;
+  const onDrop = useCallback(
+    async (acceptedFiles) => {
+      const f = acceptedFiles?.[0];
+      setDropError("");
+      if (!f) return;
 
-    const { ok, error } = validateTxtFile(f);
-    if (!ok) {
-      setFile(null);
-      setDropError(error);
-      return;
-    }
+      const { ok, error } = validateTxtFile(f);
+      if (!ok) {
+        setFile(null);
+        setDropError(error);
+        return;
+      }
 
-    setFile(f);
-    setStatus("processing");
-    await new Promise((r) => setTimeout(r, 500));
-    setStatus("done");
-  }, []);
+      setFile(f);
+      setStatus("processing");
+      try {
+        // call backend to encrypt; do NOT auto-download
+        const { token, blob, filename } = await encryptFile(f);
+        // prepare download link and show token
+        const url = URL.createObjectURL(blob);
+        // clean previous url if existed
+        if (encDownloadUrl) URL.revokeObjectURL(encDownloadUrl);
+        setEncDownloadUrl(url);
+        setEncFilename(filename);
+        setToken(token);
+        setStatus("done");
+      } catch {
+        setStatus("idle");
+        setDropError("Encryption service is unavailable.");
+      }
+    },
+    [encDownloadUrl]
+  );
 
   const handleReset = () => {
     setFile(null);
     setStatus("idle");
     setDropError("");
+    setToken("");
+    if (encDownloadUrl) URL.revokeObjectURL(encDownloadUrl);
+    setEncDownloadUrl("");
+    setEncFilename("");
+  };
+
+  const handleCopyToken = async () => {
+    try {
+      await navigator.clipboard.writeText(token);
+      // optional: toast can be added later; keep UI minimal per your request
+    } catch {
+      // silent fallback
+    }
   };
 
   const isEncrypting = status === "processing";
@@ -97,6 +139,7 @@ const Encryption = () => {
               className="token-output"
               type="text"
               readOnly
+              value={token}
               placeholder={`${TOKEN_LEN}-character token (coming soon)`}
               data-testid="encryption.token.value"
             />
@@ -108,21 +151,31 @@ const Encryption = () => {
               <button
                 className="primary-button"
                 type="button"
-                disabled
+                onClick={handleCopyToken}
+                disabled={!token}
                 data-testid="encryption.token.copy"
-                title="Copy token (disabled in this PR)"
+                title={token ? "Copy token" : "Copy token (unavailable)"}
               >
                 Copy Token
               </button>
-              <button
+              <a
                 className="primary-button"
-                type="button"
-                disabled
+                role="button"
+                href={encDownloadUrl || undefined}
+                download={encFilename || undefined}
+                aria-disabled={!encDownloadUrl}
                 data-testid="encryption.download.encrypted"
-                title="Download Encrypted File (disabled in this PR)"
+                title={
+                  encDownloadUrl
+                    ? "Download Encrypted File"
+                    : "Download Encrypted File (unavailable)"
+                }
+                onClick={(e) => {
+                  if (!encDownloadUrl) e.preventDefault();
+                }}
               >
                 Download Encrypted File
-              </button>
+              </a>
               <button
                 className="primary-button"
                 type="button"

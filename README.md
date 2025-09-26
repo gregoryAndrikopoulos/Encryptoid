@@ -1,8 +1,8 @@
 # Encryptoid 🔐
 
-A web application for encrypting and decrypting text files.
-It is built with **React** and powered by **Vite** for fast development
-and optimized builds.
+A web application for encrypting and decrypting text files.  
+Built with **React** and powered by **Vite** for fast development and optimized builds.  
+Includes a lightweight **Express backend** for encryption/decryption APIs.
 
 ---
 
@@ -16,10 +16,12 @@ and optimized builds.
 
 - **React 19** — UI
 - **Vite 7** — dev server & bundler
+- **Express 5** — backend API server
 - **Vitest 3 + Testing Library** — unit/component tests
+- **Vitest + Supertest** — backend API tests
 - **WebdriverIO 9 (DevTools)** + **Mocha** — smoke tests
 - **ESLint** + **Prettier** — linting & formatting
-- **GitHub Actions** — CI for Smoke
+- **GitHub Actions** — CI for smoke + server tests
 - **Node 24**, **pnpm 10** — runtime & package manager
 
 ### Runtime Versions
@@ -31,11 +33,11 @@ nodejs 24.7.0
 pnpm 10.16.0
 ```
 
-> If you use `asdf`, simply run:
->
-> ```bash
-> asdf install
-> ```
+If you use `asdf`, simply run:
+
+```bash
+asdf install
+```
 
 ---
 
@@ -54,10 +56,16 @@ Install dependencies:
 pnpm install
 ```
 
-Start the dev server (default: <http://localhost:5173>):
+Start the dev server (default: http://localhost:5173):
 
 ```bash
 pnpm dev
+```
+
+Start the backend server (default: http://localhost:3000):
+
+```bash
+pnpm dev:server
 ```
 
 Build for production:
@@ -66,7 +74,7 @@ Build for production:
 pnpm build
 ```
 
-Preview the production build locally (default: <http://localhost:4173>):
+Preview the production build locally (default: http://localhost:4173):
 
 ```bash
 pnpm preview
@@ -85,6 +93,23 @@ Run once in CI mode:
 
 ```bash
 pnpm test:unit
+```
+
+### Server API tests (Vitest + Supertest)
+
+- Location: `server/**/*.test.js`
+- Runs the Express server in-memory for integration tests.
+
+Run once in CI mode:
+
+```bash
+pnpm test:server
+```
+
+Run in watch mode:
+
+```bash
+pnpm test:server:watch
 ```
 
 ### Smoke tests (WebdriverIO + Mocha)
@@ -109,10 +134,12 @@ Typical local flows:
 ```bash
 # 1) Run against the dev server (in another terminal)
 pnpm dev
+pnpm dev:server
 pnpm test:smoke
 
 # 2) Run against a preview server
 pnpm build
 pnpm preview &
+pnpm dev:server &
 pnpm test:smoke
 ```

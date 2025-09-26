@@ -1,8 +1,9 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useMemo, useState, useEffect } from "react";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 import Dropzone from "./Dropzone.jsx";
 import "../styles/Shared.css";
-import { validateTxtFile } from "../utils/validation.js";
+import { validateEncryptedTxtFile } from "../utils/validation.js";
+import { decryptFile } from "../../../../services/encryption.js";
 
 const REQUIRED_LEN = 256;
 
@@ -13,6 +14,16 @@ const Decryption = () => {
   const [status, setStatus] = useState("idle"); // "idle" | "processing" | "done"
   const [dropError, setDropError] = useState("");
 
+  // hold decrypted file for download
+  const [decDownloadUrl, setDecDownloadUrl] = useState("");
+  const [decFilename, setDecFilename] = useState("");
+
+  useEffect(() => {
+    return () => {
+      if (decDownloadUrl) URL.revokeObjectURL(decDownloadUrl);
+    };
+  }, [decDownloadUrl]);
+
   const tokenValid = useMemo(() => token.length === REQUIRED_LEN, [token]);
 
   const onDrop = useCallback((acceptedFiles) => {
@@ -21,7 +32,7 @@ const Decryption = () => {
     setStatus("idle");
     if (!f) return;
 
-    const { ok, error } = validateTxtFile(f);
+    const { ok, error } = validateEncryptedTxtFile(f);
     if (!ok) {
       setFile(null);
       setDropError(error);
@@ -33,8 +44,17 @@ const Decryption = () => {
   const handleDecrypt = async () => {
     if (!file || !tokenValid || status === "processing") return;
     setStatus("processing");
-    await new Promise((r) => setTimeout(r, 500));
-    setStatus("done");
+    try {
+      const { blob, filename } = await decryptFile(file, token);
+      const url = URL.createObjectURL(blob);
+      if (decDownloadUrl) URL.revokeObjectURL(decDownloadUrl);
+      setDecDownloadUrl(url);
+      setDecFilename(filename);
+      setStatus("done");
+    } catch {
+      setStatus("idle");
+      setDropError("Decryption failed or service unavailable.");
+    }
   };
 
   const handleReset = () => {
@@ -42,6 +62,9 @@ const Decryption = () => {
     setToken("");
     setShowToken(false);
     setDropError("");
+    if (decDownloadUrl) URL.revokeObjectURL(decDownloadUrl);
+    setDecDownloadUrl("");
+    setDecFilename("");
     setStatus("idle");
   };
 
@@ -62,14 +85,19 @@ const Decryption = () => {
       {!done && (
         <>
           <p className="directive" data-testid="decryption.directive">
-            Drop an encrypted <code>.txt</code> file and paste the{" "}
+            Drop an encrypted <code>.enc.txt</code> file and paste the{" "}
             {REQUIRED_LEN}-character token you saved. In this pull request,
             decryption and file download are placeholders only — the final logic
             will be added later.
           </p>
 
           <div className="flow-md" data-testid="decryption.dropzone.wrap">
-            <Dropzone onDrop={onDrop} testId="decryption.dropzone" />
+            <Dropzone
+              onDrop={onDrop}
+              testId="decryption.dropzone"
+              titleText="Drop your .enc.txt file here"
+              subhintText="Only .enc.txt files are supported"
+            />
             {dropError && (
               <p
                 className="drop-error"
@@ -160,15 +188,24 @@ const Decryption = () => {
             logic is implemented.
           </p>
           <div className="button-container">
-            <button
+            <a
               className="primary-button"
-              type="button"
-              disabled
+              role="button"
+              href={decDownloadUrl || undefined}
+              download={decFilename || undefined}
+              aria-disabled={!decDownloadUrl}
               data-testid="decryption.download.decrypted"
-              title="Download Decrypted File (disabled in this PR)"
+              title={
+                decDownloadUrl
+                  ? "Download Decrypted File"
+                  : "Download Decrypted File (unavailable)"
+              }
+              onClick={(e) => {
+                if (!decDownloadUrl) e.preventDefault();
+              }}
             >
               Download Decrypted File
-            </button>
+            </a>
             <button
               className="primary-button"
               type="button"

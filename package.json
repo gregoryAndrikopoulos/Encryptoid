@@ -10,9 +10,12 @@
   "packageManager": "pnpm@10.16.0",
   "scripts": {
     "dev": "vite",
+    "dev:server": "node server/src/index.js",
     "build": "vite build",
     "test:smoke": "wdio run test/wdio.conf.js",
     "test:unit": "vitest run",
+    "test:server": "vitest run --config server/vitest.config.js",
+    "test:server:watch": "vitest --config server/vitest.config.js",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "format": "prettier --write .",
@@ -21,6 +24,9 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "busboy": "^1.6.0",
+    "cors": "^2.8.5",
+    "express": "^5.1.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1",
     "react-dropzone": "^14.3.8",
@@ -52,6 +58,7 @@
     "prettier": "^3.6.2",
     "start-server-and-test": "^2.1.2",
     "vite": "^7.1.7",
+    "supertest": "^7.1.4",
     "vitest": "^3.2.4"
   }
 }

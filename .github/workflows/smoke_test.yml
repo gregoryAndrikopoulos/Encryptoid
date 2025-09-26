@@ -36,6 +36,9 @@ jobs:
       - name: 🔬 Unit tests (Vitest)
         run: pnpm test:unit
 
+      - name: 🔬 Server tests (Vitest)
+        run: pnpm test:server
+
       - name: 🏗️ Build app
         run: pnpm build
 

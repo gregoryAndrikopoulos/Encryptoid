@@ -7,6 +7,8 @@ const Dropzone = ({
   onDropRejected,
   testId = "dropzone",
   disabled = false,
+  titleText = "Drop your .txt file here",
+  subhintText = "Only .txt files are supported",
 }) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
@@ -34,9 +36,9 @@ const Dropzone = ({
         aria-hidden="true"
       />
       <p className="dropzone-hint">
-        <strong>Drop your .txt file here</strong> or click to select
+        <strong>{titleText}</strong> or click to select
       </p>
-      <small className="dropzone-subhint">Only .txt files are supported</small>
+      <small className="dropzone-subhint">{subhintText}</small>
     </div>
   );
 };
