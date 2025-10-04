@@ -2,10 +2,14 @@ import "./Header.css";
 
 const Header = () => {
   return (
-    <header id="top" className="header" role="banner" data-testid="header.root">
+    <header id="top" className="header" data-testid="header.root">
       <img
-        src="/banner.png"
+        src="/logo.png"
         alt="Encryptoid logo"
+        width="1024"
+        height="1024"
+        decoding="async"
+        fetchpriority="high"
         className="logo"
         data-testid="header.logo"
       />

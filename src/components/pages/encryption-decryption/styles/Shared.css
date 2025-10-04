@@ -8,7 +8,7 @@
   border-radius: 0.75rem;
   display: flex;
   flex-direction: column;
-  align-items: stretch; /* stretch internal blocks to full width */
+  align-items: stretch;
   justify-content: flex-start;
   position: relative;
   min-height: 91.5vh;
@@ -27,53 +27,6 @@
   margin-bottom: 2.5rem;
   color: var(--color-accent);
   text-align: justify;
-}
-
-.dropzone {
-  border: 2px dashed var(--color-accent);
-  border-radius: 0.75rem;
-  padding: 2rem 10rem;
-  cursor: pointer;
-  outline: none;
-  background-color: var(--color-primary);
-  transition: var(--transition);
-  text-align: center;
-  margin-bottom: 2rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-  user-select: none;
-}
-
-.dropzone:hover {
-  border-color: var(--color-tint);
-  transform: translateY(-2px);
-}
-
-.dropzone:focus-visible {
-  outline: 2px solid var(--color-tint);
-  outline-offset: 2px;
-}
-
-.dropzone--active {
-  border-color: var(--color-tint);
-  background: rgba(0, 255, 170, 0.06);
-}
-
-.dropzone-icon {
-  color: var(--color-accent);
-}
-
-.dropzone-hint {
-  color: var(--color-white);
-  margin: 0;
-  text-align: center;
-}
-
-.dropzone-subhint {
-  color: var(--color-accent);
-  opacity: 0.85;
 }
 
 .security-key-form {
@@ -96,13 +49,13 @@
 }
 
 .security-key-field {
-  position: relative; /* anchor the eye button to this field */
+  position: relative;
   width: 100%;
 }
 
 .security-key {
   width: 100%;
-  padding: 0.75rem 2.5rem 0.75rem 0.75rem; /* room for eye button */
+  padding: 0.75rem 2.5rem 0.75rem 0.75rem;
   border: 0.125rem solid var(--color-accent);
   border-radius: 0.38rem;
   font-size: 1.15rem;
@@ -196,7 +149,7 @@
 @media (max-width: 1280px) {
   .encryption,
   .decryption {
-    margin: 2rem auto 5rem; /* room for mobile bottom nav */
+    margin: 2rem auto 5rem;
     padding-bottom: 4.5rem;
   }
 }
@@ -228,7 +181,7 @@
     font-size: 1rem;
   }
   .security-key-form {
-    padding-left: 0.75rem; /* replace invalid negative paddings */
+    padding-left: 0.75rem;
     padding-right: 0.75rem;
   }
 }
