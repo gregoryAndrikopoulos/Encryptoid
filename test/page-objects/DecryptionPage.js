@@ -15,37 +15,35 @@ class DecryptionPage {
   get titleDone() {
     return $('[data-testid="decryption.title.done"]');
   }
-
   get tokenForm() {
     return $('[data-testid="decryption.token.form"]');
-  }
-  get tokenLabel() {
-    return $('[data-testid="decryption.token.label"]');
   }
   get tokenInput() {
     return $('[data-testid="decryption.token.input"]');
   }
-  get tokenToggle() {
-    return $('[data-testid="decryption.token.toggle"]');
-  }
   get tokenHelp() {
     return $('[data-testid="decryption.token.help"]');
   }
-
   get decryptBtn() {
     return $('[data-testid="decryption.action.decrypt"]');
   }
   get results() {
     return $('[data-testid="decryption.results"]');
   }
-  get resultsNote() {
-    return $('[data-testid="decryption.results.note"]');
-  }
   get downloadBtn() {
     return $('[data-testid="decryption.download.decrypted"]');
   }
   get resetBtn() {
     return $('[data-testid="decryption.action.reset"]');
+  }
+  get dropHint() {
+    return $('[data-testid="decryption.dropzone"] .dropzone-hint');
+  }
+  get dropSubhint() {
+    return $('[data-testid="decryption.dropzone"] .dropzone-subhint');
+  }
+  get dropInfo() {
+    return $('[data-testid="decryption.drop.info"]');
   }
 
   async open() {

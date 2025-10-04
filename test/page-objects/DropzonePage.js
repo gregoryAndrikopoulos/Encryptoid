@@ -14,7 +14,6 @@ export default class DropzonePage {
   get input() {
     return $(`[data-testid="${this.base}.input"]`);
   }
-
   get error() {
     const errId = this.base.replace(".dropzone", ".drop.error");
     return $(`[data-testid="${errId}"]`);

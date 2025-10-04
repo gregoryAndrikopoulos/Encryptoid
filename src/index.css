@@ -72,6 +72,12 @@ a:hover {
   color: var(--color-tint);
 }
 
+a.primary-button,
+a.primary-button:hover,
+a.primary-button:focus-visible {
+  color: var(--color-primary);
+}
+
 a:focus-visible {
   outline: 2px solid var(--color-tint);
   outline-offset: 2px;

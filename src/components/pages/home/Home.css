@@ -2,10 +2,20 @@
   margin: 5rem auto 2rem;
   max-width: 60rem;
   padding: 2rem;
-  background-color: var(--color-primary);
+  background:
+    radial-gradient(
+      60% 80% at 50% 20%,
+      rgba(0, 255, 170, 0.07),
+      transparent 60%
+    ),
+    var(--color-primary);
   box-shadow: 0 0 1rem var(--color-shadow);
   border-radius: 0.75rem;
   color: var(--color-white);
+}
+
+.home > * + * {
+  margin-top: 1rem;
 }
 
 .actions-grid {
@@ -19,7 +29,11 @@
   border: 1px solid var(--color-shadow);
   border-radius: 0.75rem;
   padding: 1.25rem;
-  background: rgba(0, 0, 0, 0.08);
+  background: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.02),
+    rgba(0, 0, 0, 0.06)
+  );
   text-decoration: none;
   color: var(--color-white);
   display: grid;
@@ -27,13 +41,18 @@
   transition:
     transform var(--transition),
     box-shadow var(--transition),
-    border-color var(--transition);
+    border-color var(--transition),
+    background-color var(--transition);
 }
 
 .card:hover {
   transform: translateY(-2px);
   border-color: var(--color-tint);
   box-shadow: 0 8px 22px -16px var(--color-shadow);
+}
+
+.card:active {
+  transform: translateY(0);
 }
 
 .card:focus-visible {
@@ -43,18 +62,37 @@
 
 .card-icon {
   color: var(--color-accent);
+  display: inline-grid;
+  place-items: center;
+}
+
+.card-icon svg {
+  width: 32px;
+  height: 32px;
 }
 
 .card-title {
   margin: 0;
   color: var(--color-accent);
-  font-size: 1.25rem;
+  font-size: clamp(1.1rem, 1.25vw, 1.25rem);
+  letter-spacing: 0.2px;
 }
 
 .card-text {
   margin: 0;
   color: var(--color-accent);
   opacity: 0.95;
+  line-height: 1.6;
+}
+
+.card-text code,
+.how-it-works code,
+.notes code {
+  background: rgba(0, 0, 0, 0.18);
+  border: 1px solid var(--color-shadow);
+  border-radius: 0.4rem;
+  padding: 0.05rem 0.35rem;
+  color: var(--color-white);
 }
 
 .how-it-works,
@@ -64,12 +102,15 @@
   border-radius: 0.75rem;
   padding: 1rem 1.25rem;
   margin-bottom: 1rem;
+  box-shadow: 0 6px 18px -12px var(--color-shadow);
 }
 
 .how-it-works h3,
 .notes h3 {
   margin: 0 0 0.5rem;
   color: var(--color-accent);
+  font-size: clamp(1rem, 1.2vw, 1.1rem);
+  letter-spacing: 0.3px;
 }
 
 .how-it-works ol,
@@ -79,11 +120,22 @@
   color: var(--color-accent);
 }
 
+.how-it-works ol > li::marker,
+.notes ul > li::marker {
+  color: var(--color-tint);
+}
+
+.how-it-works li + li,
+.notes li + li {
+  margin-top: 0.4rem;
+}
+
 @media (prefers-reduced-motion: reduce) {
   .card {
     transition: none;
   }
-  .card:hover {
+  .card:hover,
+  .card:active {
     transform: none;
     box-shadow: none;
   }
@@ -99,5 +151,14 @@
 @media (max-width: 720px) {
   .actions-grid {
     grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 420px) {
+  .home {
+    padding: 1.25rem;
+  }
+  .card {
+    padding: 1rem;
   }
 }

@@ -3,7 +3,7 @@ import DropzonePage from "./DropzonePage.js";
 
 class EncryptionPage {
   constructor() {
-    this.dropzone = new DropzonePage("encryption.dropzone"); // reuse same PO
+    this.dropzone = new DropzonePage("encryption.dropzone");
   }
 
   get root() {
@@ -18,10 +18,6 @@ class EncryptionPage {
   get titleDone() {
     return $('[data-testid="encryption.title.done"]');
   }
-  get directive() {
-    return $('[data-testid="encryption.directive"]');
-  }
-
   get results() {
     return $('[data-testid="encryption.results"]');
   }
@@ -37,6 +33,13 @@ class EncryptionPage {
   get resetBtn() {
     return $('[data-testid="encryption.action.reset"]');
   }
+  get toastCopied() {
+    return $('[data-testid="toast.token.copied"]');
+  }
+
+  async waitForCopiedToast() {
+    await this.toastCopied.waitForDisplayed({ timeout: 5000 });
+  }
 
   async open() {
     await browser.url("/");
@@ -46,15 +49,17 @@ class EncryptionPage {
     await this.root.waitForDisplayed({ timeout: 5000 });
   }
 
-  async waitProcessing() {
-    await this.titleProcessing.waitForDisplayed({ timeout: 4000 });
-  }
   async waitDone() {
     await this.titleDone.waitForDisplayed({ timeout: 5000 });
   }
 
   async reset() {
-    await this.resetBtn.click();
+    const btn = await this.resetBtn;
+
+    await btn.scrollIntoView({ block: "center", inline: "center" });
+    await btn.waitForDisplayed({ timeout: 5000 });
+    await btn.waitForClickable({ timeout: 5000 });
+    await btn.click();
     await this.titleInitial.waitForDisplayed({ timeout: 4000 });
     await this.dropzone.expectVisible();
   }
