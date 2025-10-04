@@ -70,34 +70,38 @@ const Decryption = () => {
 
   const done = status === "done";
   const isDecrypting = status === "processing";
+  const dropTitleText = file ? `Selected: ${file.name}` : "Drop file here";
+  const dropSubhintText = file
+    ? "Drop another .enc.txt to replace"
+    : "Only .enc.txt files are supported";
 
   return (
     <div className="decryption" data-testid="page.decryption">
       {!done && (
         <h2 data-testid="decryption.title">Commencing file Decryption...</h2>
       )}
-      {done && (
-        <h2 data-testid="decryption.title.done">
-          Decryption complete (placeholder)
-        </h2>
-      )}
+      {done && <h2 data-testid="decryption.title.done">Decryption complete</h2>}
 
       {!done && (
         <>
-          <p className="directive" data-testid="decryption.directive">
-            Drop an encrypted <code>.enc.txt</code> file and paste the{" "}
-            {REQUIRED_LEN}-character token you saved. In this pull request,
-            decryption and file download are placeholders only — the final logic
-            will be added later.
-          </p>
-
           <div className="flow-md" data-testid="decryption.dropzone.wrap">
             <Dropzone
               onDrop={onDrop}
               testId="decryption.dropzone"
-              titleText="Drop your .enc.txt file here"
-              subhintText="Only .enc.txt files are supported"
+              titleText={dropTitleText}
+              subhintText={dropSubhintText}
             />
+
+            {file && !dropError && (
+              <small
+                className="dropzone-subhint"
+                data-testid="decryption.drop.info"
+                aria-live="polite"
+              >
+                File ready: <strong>{file.name}</strong>
+              </small>
+            )}
+
             {dropError && (
               <p
                 className="drop-error"
@@ -169,8 +173,7 @@ const Decryption = () => {
                 style={{ color: "var(--color-accent)" }}
                 data-testid="decryption.token.help"
               >
-                Token must be exactly {REQUIRED_LEN} characters. (This PR does
-                not yet validate token contents.)
+                Token must be exactly {REQUIRED_LEN} characters.
               </small>
             )}
           </div>
@@ -183,10 +186,6 @@ const Decryption = () => {
           data-testid="decryption.results"
           aria-live="polite"
         >
-          <p className="directive" data-testid="decryption.results.note">
-            The decrypted file download will be enabled once the real decryption
-            logic is implemented.
-          </p>
           <div className="button-container">
             <a
               className="primary-button"
@@ -211,9 +210,9 @@ const Decryption = () => {
               type="button"
               onClick={handleReset}
               data-testid="decryption.action.reset"
-              title="Decrypt another file"
+              title="Decrypt Another File"
             >
-              Decrypt another file
+              Decrypt Another File
             </button>
           </div>
         </div>

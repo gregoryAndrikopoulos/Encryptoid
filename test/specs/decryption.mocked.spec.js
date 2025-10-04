@@ -7,7 +7,6 @@ const ENC_GOOD = path.join(FIXTURES, "cipher.enc.txt");
 const ENC_EMPTY = path.join(FIXTURES, "empty.enc.txt");
 const TOKEN_LEN = 256;
 
-// Tiny one-shot decrypt mock (runs in the browser context)
 async function mockDecryptOnce(
   filename = "cipher.dec.txt",
   body = "decrypted content"
@@ -81,6 +80,31 @@ describe("Decryption page (E2E)", () => {
     }
 
     await DecryptionPO.dropzone.uploadLocalFile(ENC_GOOD);
+
+    const hintText = (await DecryptionPO.dropHint.getText()) || "";
+    if (!/Selected:\s*cipher\.enc\.txt/i.test(hintText)) {
+      throw new Error(
+        `Expected hint to show "Selected: cipher.enc.txt", got "${hintText}"`
+      );
+    }
+
+    const subhintText = (await DecryptionPO.dropSubhint.getText()) || "";
+    if (!/Drop another \.enc\.txt to replace/i.test(subhintText)) {
+      throw new Error(
+        `Expected subhint to say "Drop another .enc.txt to replace", got "${subhintText}"`
+      );
+    }
+
+    if (!(await DecryptionPO.dropInfo.isDisplayed())) {
+      throw new Error("Expected file info line to be visible after valid drop");
+    }
+    const infoText = (await DecryptionPO.dropInfo.getText()) || "";
+    if (!/File ready:\s*cipher\.enc\.txt/i.test(infoText)) {
+      throw new Error(
+        `Expected file info to include "cipher.enc.txt", got "${infoText}"`
+      );
+    }
+
     if (!(await DecryptionPO.decryptBtn.isEnabled())) {
       throw new Error("Decrypt should be enabled after valid file + token");
     }

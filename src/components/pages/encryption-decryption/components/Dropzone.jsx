@@ -7,7 +7,7 @@ const Dropzone = ({
   onDropRejected,
   testId = "dropzone",
   disabled = false,
-  titleText = "Drop your .txt file here",
+  titleText = "Drop file here",
   subhintText = "Only .txt files are supported",
 }) => {
   const { getRootProps, getInputProps, isDragActive } = useDropzone({

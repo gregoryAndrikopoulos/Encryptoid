@@ -3,7 +3,7 @@ import DropzonePage from "./DropzonePage.js";
 
 class EncryptionPage {
   constructor() {
-    this.dropzone = new DropzonePage("encryption.dropzone"); // reuse same PO
+    this.dropzone = new DropzonePage("encryption.dropzone");
   }
 
   get root() {
@@ -18,10 +18,6 @@ class EncryptionPage {
   get titleDone() {
     return $('[data-testid="encryption.title.done"]');
   }
-  get directive() {
-    return $('[data-testid="encryption.directive"]');
-  }
-
   get results() {
     return $('[data-testid="encryption.results"]');
   }
@@ -36,6 +32,13 @@ class EncryptionPage {
   }
   get resetBtn() {
     return $('[data-testid="encryption.action.reset"]');
+  }
+  get toastCopied() {
+    return $('[data-testid="toast.token.copied"]');
+  }
+
+  async waitForCopiedToast() {
+    await this.toastCopied.waitForDisplayed({ timeout: 5000 });
   }
 
   async open() {

@@ -1,11 +1,10 @@
-// test/specs/encryption.mocked.spec.js
 import path from "node:path";
 import { browser } from "@wdio/globals";
 import EncryptionPO from "../page-objects/EncryptionPage.js";
 
 const FIXTURES = path.resolve(process.cwd(), "test/fixtures");
 const TXT_GOOD = path.join(FIXTURES, "sample.txt");
-const TXT_EMPTY = path.join(FIXTURES, "empty.txt"); // <-- fix: this is for encryption
+const TXT_EMPTY = path.join(FIXTURES, "empty.txt");
 const PNG_FILE = path.join(FIXTURES, "image.png");
 
 // One-shot mock for /api/encrypt (restores fetch immediately after use)
@@ -62,7 +61,7 @@ describe("Encryption page (E2E / mocked API)", () => {
     }
   });
 
-  it("renders initial heading + directive + dropzone", async () => {
+  it("renders initial heading + dropzone", async () => {
     await EncryptionPO.dropzone.expectVisible();
 
     const heading = await EncryptionPO.titleInitial.getText();
@@ -70,10 +69,6 @@ describe("Encryption page (E2E / mocked API)", () => {
       throw new Error(
         `Expected heading to include "Commencing file Encryption", got "${heading}"`
       );
-    }
-
-    if (!(await EncryptionPO.directive.isDisplayed())) {
-      throw new Error("Directive should be visible");
     }
   });
 
@@ -138,6 +133,11 @@ describe("Encryption page (E2E / mocked API)", () => {
     if (!(await EncryptionPO.downloadEncryptedBtn.isEnabled())) {
       throw new Error("Download button should be enabled in mocked mode");
     }
+
+    await EncryptionPO.tokenCopyBtn.click();
+    await EncryptionPO.waitForCopiedToast();
+    await EncryptionPO.tokenValue.click();
+    await EncryptionPO.waitForCopiedToast();
   });
 
   it('supports "Encrypt another file" reset', async () => {

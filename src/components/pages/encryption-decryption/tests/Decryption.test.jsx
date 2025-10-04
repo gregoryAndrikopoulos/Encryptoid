@@ -41,10 +41,9 @@ afterEach(() => {
 });
 
 describe("Decryption (UI-only)", () => {
-  it("renders initial heading + directive + dropzone + token form", () => {
+  it("renders initial heading + dropzone + token form", () => {
     render(<Decryption />);
     expect(screen.getByTestId("decryption.title")).toBeInTheDocument();
-    expect(screen.getByTestId("decryption.directive")).toBeInTheDocument();
     expect(screen.getByTestId("decryption.dropzone.wrap")).toBeInTheDocument();
     expect(screen.getByTestId("decryption.dropzone")).toBeInTheDocument();
     expect(screen.getByTestId("decryption.token.form")).toBeInTheDocument();
@@ -204,5 +203,83 @@ describe("Decryption (UI-only)", () => {
     expect(screen.getByTestId("decryption.title")).toBeInTheDocument();
     expect(screen.getByTestId("decryption.dropzone.wrap")).toBeInTheDocument();
     expect(screen.getByTestId("decryption.token.form")).toBeInTheDocument();
+  });
+
+  it("updates dropzone title/subhint and shows file info after valid .enc.txt drop", async () => {
+    render(<Decryption />);
+
+    const dzRoot = screen.getByTestId("decryption.dropzone");
+    const dzInput = screen.getByTestId("decryption.dropzone.input");
+
+    const chosen = new File(["secret"], "chosen.enc.txt", {
+      type: "text/plain",
+    });
+
+    await act(async () => {
+      fireEvent.change(dzInput, { target: { files: [chosen] } });
+    });
+
+    expect(
+      within(dzRoot).getByText(/Selected:\s*chosen\.enc\.txt/i)
+    ).toBeInTheDocument();
+
+    expect(
+      within(dzRoot).getByText(/Drop another \.enc\.txt to replace/i)
+    ).toBeInTheDocument();
+
+    const info = screen.getByTestId("decryption.drop.info");
+    expect(info).toBeInTheDocument();
+    expect(info).toHaveTextContent(/File ready:\s*chosen\.enc\.txt/i);
+  });
+
+  it("replaces previously selected file when another valid .enc.txt is dropped", async () => {
+    render(<Decryption />);
+
+    const dzRoot = screen.getByTestId("decryption.dropzone");
+    const dzInput = screen.getByTestId("decryption.dropzone.input");
+
+    const first = new File(["aaa"], "first.enc.txt", { type: "text/plain" });
+    const second = new File(["bbb"], "second.enc.txt", { type: "text/plain" });
+
+    await act(async () => {
+      fireEvent.change(dzInput, { target: { files: [first] } });
+    });
+    expect(
+      within(dzRoot).getByText(/Selected:\s*first\.enc\.txt/i)
+    ).toBeInTheDocument();
+
+    await act(async () => {
+      fireEvent.change(dzInput, { target: { files: [second] } });
+    });
+
+    expect(
+      within(dzRoot).queryByText(/Selected:\s*first\.enc\.txt/i)
+    ).not.toBeInTheDocument();
+    expect(
+      within(dzRoot).getByText(/Selected:\s*second\.enc\.txt/i)
+    ).toBeInTheDocument();
+    expect(
+      within(dzRoot).getByText(/Drop another \.enc\.txt to replace/i)
+    ).toBeInTheDocument();
+
+    const info = screen.getByTestId("decryption.drop.info");
+    expect(info).toHaveTextContent(/second\.enc\.txt/i);
+  });
+
+  it("toggles between password and text", () => {
+    render(<Decryption />);
+    const input = screen.getByTestId("decryption.token.input");
+    const toggle = screen.getByTestId("decryption.token.toggle");
+
+    // default should be masked (password)
+    expect(input).toHaveAttribute("type", "password");
+
+    // click visible
+    fireEvent.click(toggle);
+    expect(input).toHaveAttribute("type", "text");
+
+    // click again masked
+    fireEvent.click(toggle);
+    expect(input).toHaveAttribute("type", "password");
   });
 });

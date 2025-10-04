@@ -10,6 +10,9 @@ import {
 
 let fetchSpy;
 
+/* ===========================
+ * Suite 1: General UI & Flow
+ * =========================== */
 beforeEach(() => {
   // Stub ALL fetch calls for this suite.
   fetchSpy = vi.fn(async (input = {}) => {
@@ -42,12 +45,11 @@ afterEach(() => {
 });
 
 describe("Encryption (UI-only)", () => {
-  it("renders initial heading + directive + dropzone", () => {
+  it("renders initial heading + dropzone", () => {
     render(<Encryption />);
     expect(screen.getByTestId("encryption.title")).toHaveTextContent(
       /Commencing file Encryption/i
     );
-    expect(screen.getByTestId("encryption.directive")).toBeInTheDocument();
     expect(screen.getByTestId("encryption.dropzone.wrap")).toBeInTheDocument();
     expect(screen.getByTestId("encryption.dropzone")).toBeInTheDocument();
   });
@@ -113,7 +115,7 @@ describe("Encryption (UI-only)", () => {
     const tokenField = within(tokenBlock).getByTestId("encryption.token.value");
     expect(tokenField).toHaveValue("x".repeat(256));
 
-    // Copy enabled (if your UI keeps it disabled, swap to .toBeDisabled())
+    // Copy enabled
     const copyBtn = within(tokenBlock).getByTestId("encryption.token.copy");
     expect(copyBtn).not.toBeDisabled();
 
@@ -168,5 +170,97 @@ describe("Encryption (UI-only)", () => {
 
     expect(screen.getByTestId("encryption.title")).toBeInTheDocument();
     expect(screen.getByTestId("encryption.dropzone.wrap")).toBeInTheDocument();
+  });
+});
+
+/* ===================================
+ * Suite 2: Token copy + toast dedupe
+ * =================================== */
+describe("Encryption token copy", () => {
+  beforeEach(() => {
+    fetchSpy = vi.fn(async (input) => {
+      const url = typeof input === "string" ? input : input?.url || "";
+      if (url.includes("/api/encrypt")) {
+        const token = "t".repeat(256);
+        return new Response(
+          JSON.stringify({
+            ok: true,
+            token,
+            filename: "note.txt",
+            plainSize: 4,
+            encSize: 4,
+            ciphertextB64: "AQIDBA==",
+          }),
+          { status: 200, headers: { "Content-Type": "application/json" } }
+        );
+      }
+      return new Response("", { status: 404 });
+    });
+    vi.stubGlobal("fetch", fetchSpy);
+  });
+
+  afterEach(() => {
+    vi.unstubAllGlobals();
+  });
+
+  it("copies the token to clipboard via button", async () => {
+    const spy = vi.spyOn(navigator.clipboard, "writeText");
+
+    render(<Encryption />);
+    const dz = screen.getByTestId("encryption.dropzone.input");
+
+    await act(async () => {
+      fireEvent.change(dz, {
+        target: { files: [makeTxtFile("note.txt", "test")] },
+      });
+    });
+
+    const results = await screen.findByTestId("encryption.results");
+    const tokenBlock = within(results).getByTestId("encryption.results.token");
+
+    const tokenField = within(tokenBlock).getByTestId("encryption.token.value");
+    expect(tokenField).toHaveValue("t".repeat(256)); // sanity check
+
+    const copyBtn = within(tokenBlock).getByTestId("encryption.token.copy");
+    expect(copyBtn).not.toBeDisabled();
+
+    await act(async () => {
+      fireEvent.click(copyBtn);
+    });
+
+    expect(spy).toHaveBeenCalledTimes(1);
+    expect(spy).toHaveBeenCalledWith("t".repeat(256));
+    expect(await screen.findByText(/token copied/i)).toBeInTheDocument();
+  });
+
+  it("copies token by clicking the field and does not spam multiple toasts", async () => {
+    const spy = vi.spyOn(navigator.clipboard, "writeText");
+
+    render(<Encryption />);
+    const dz = screen.getByTestId("encryption.dropzone.input");
+
+    await act(async () => {
+      fireEvent.change(dz, {
+        target: { files: [makeTxtFile("note.txt", "test")] },
+      });
+    });
+
+    const results = await screen.findByTestId("encryption.results");
+    const tokenField = within(results).getByTestId("encryption.token.value");
+
+    // Click the field to copy
+    await act(async () => {
+      fireEvent.click(tokenField);
+    });
+    // Rapidly click again — deduped toast should not create a second instance
+    await act(async () => {
+      fireEvent.click(tokenField);
+    });
+
+    expect(spy).toHaveBeenCalledTimes(2);
+    expect(spy).toHaveBeenLastCalledWith("t".repeat(256));
+
+    const toasts = screen.getAllByText(/token copied/i);
+    expect(toasts.length).toBe(1);
   });
 });

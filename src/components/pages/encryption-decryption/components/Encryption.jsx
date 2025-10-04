@@ -4,7 +4,11 @@ import "../styles/Shared.css";
 import { validateTxtFile } from "../utils/validation.js";
 import { encryptFile } from "../../../../services/encryption.js";
 
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
+
 const TOKEN_LEN = 256;
+const COPY_TOAST_ID = "token-copied"; // Prevent spam clicks
 
 const Encryption = () => {
   const [, setFile] = useState(null);
@@ -76,7 +80,23 @@ const Encryption = () => {
   const handleCopyToken = async () => {
     try {
       await navigator.clipboard.writeText(token);
-      // optional: toast can be added later; keep UI minimal per your request
+
+      // prevent spam clicks: reuse same toast
+      if (toast.isActive(COPY_TOAST_ID)) {
+        toast.update(COPY_TOAST_ID, {
+          render: <span data-testid="toast.token.copied">Token copied</span>,
+          type: "success",
+          autoClose: 5000,
+        });
+      } else {
+        toast.success(
+          <span data-testid="toast.token.copied">Token copied</span>,
+          {
+            toastId: COPY_TOAST_ID,
+            autoClose: 5000,
+          }
+        );
+      }
     } catch {
       // silent fallback
     }
@@ -87,16 +107,11 @@ const Encryption = () => {
 
   return (
     <div className="encryption" data-testid="page.encryption">
+      <ToastContainer position="top-center" autoClose={2200} hideProgressBar />
+
       {status === "idle" && (
         <>
           <h2 data-testid="encryption.title">Commencing file Encryption...</h2>
-          <p className="directive" data-testid="encryption.directive">
-            Upload a <code>.txt</code> file by dragging it into the area below
-            or by selecting it manually. Encryption will begin automatically
-            once the file is received. After completion, you’ll be provided with
-            a unique {TOKEN_LEN}-character token (required for decryption) and
-            the option to download your encrypted file.
-          </p>
         </>
       )}
       {isEncrypting && (
@@ -140,11 +155,12 @@ const Encryption = () => {
               type="text"
               readOnly
               value={token}
-              placeholder={`${TOKEN_LEN}-character token (coming soon)`}
+              placeholder={`${TOKEN_LEN}-character token`}
               data-testid="encryption.token.value"
+              onClick={handleCopyToken}
             />
             <small className="directive" data-testid="encryption.token.notice">
-              Keep this token safe. You’ll need it to decrypt your file later.
+              Keep this token safe for decryption.
             </small>
 
             <div className="button-container">
@@ -181,9 +197,9 @@ const Encryption = () => {
                 type="button"
                 onClick={handleReset}
                 data-testid="encryption.action.reset"
-                title="Encrypt another file"
+                title="Encrypt Another File"
               >
-                Encrypt another file
+                Encrypt Another File
               </button>
             </div>
           </div>
