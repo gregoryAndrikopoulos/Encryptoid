@@ -13,6 +13,13 @@
   z-index: 2;
 }
 
+.nav-logo {
+  height: 2.2rem;
+  width: auto;
+  display: block;
+  object-fit: contain;
+}
+
 .nav-desktop ul {
   font-size: 1.3rem;
   margin: 0;

@@ -7,6 +7,9 @@ class NavigationPage {
   get title() {
     return $('[data-testid="nav-title"]');
   }
+  get logo() {
+    return $('[data-testid="nav-logo"]');
+  }
   get linkEncryption() {
     return $('[data-testid="navlink-encryption"]');
   }

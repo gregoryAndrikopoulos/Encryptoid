@@ -7,9 +7,13 @@ describe("Navbar (NavSwitcher + AppLink)", () => {
     await NavPage.open("/");
 
     await (await NavPage.desktop).waitForDisplayed();
-    const titleText = await (await NavPage.title).getText();
-    if (titleText !== "Encryptoid") {
-      throw new Error(`Expected title "Encryptoid", got "${titleText}"`);
+
+    await (await NavPage.logo).waitForDisplayed();
+    const logoSrc = await (await NavPage.logo).getAttribute("src");
+    if (!String(logoSrc).includes("logo-nav.png")) {
+      throw new Error(
+        `Expected nav logo src to include "logo-nav.png", got "${logoSrc}"`
+      );
     }
 
     await NavPage.goEncryption();
@@ -38,7 +42,6 @@ describe("Navbar (NavSwitcher + AppLink)", () => {
     await NavPage.goHomeMobile();
     {
       const url = await browser.getUrl();
-      // home will be http://localhost:5173/ — check suffix rather than strict equality
       if (!url.endsWith("/")) {
         throw new Error(`Expected home URL to end with "/", got "${url}"`);
       }

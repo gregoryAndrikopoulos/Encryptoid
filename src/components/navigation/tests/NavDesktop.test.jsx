@@ -5,7 +5,7 @@ import { render, screen } from "@testing-library/react";
 import NavDesktop from "../desktop/NavDesktop";
 
 describe("NavDesktop", () => {
-  it("renders title and links", () => {
+  it("renders logo and navigation links", () => {
     render(
       <MemoryRouter initialEntries={["/"]}>
         <NavDesktop />
@@ -13,7 +13,12 @@ describe("NavDesktop", () => {
     );
 
     expect(screen.getByTestId("nav-desktop")).toBeInTheDocument();
-    expect(screen.getByTestId("nav-title")).toHaveTextContent("Encryptoid");
+
+    const logo = screen.getByTestId("nav-logo");
+    expect(logo).toBeInTheDocument();
+    expect(logo).toHaveAttribute("src", "/logo-nav.png");
+    expect(logo).toHaveAttribute("alt", "Encryptoid logo");
+
     expect(screen.getByTestId("navlink-encryption")).toHaveAttribute(
       "href",
       "/Encryption"
