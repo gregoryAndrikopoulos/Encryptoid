@@ -49,15 +49,17 @@ class EncryptionPage {
     await this.root.waitForDisplayed({ timeout: 5000 });
   }
 
-  async waitProcessing() {
-    await this.titleProcessing.waitForDisplayed({ timeout: 4000 });
-  }
   async waitDone() {
     await this.titleDone.waitForDisplayed({ timeout: 5000 });
   }
 
   async reset() {
-    await this.resetBtn.click();
+    const btn = await this.resetBtn;
+
+    await btn.scrollIntoView({ block: "center", inline: "center" });
+    await btn.waitForDisplayed({ timeout: 5000 });
+    await btn.waitForClickable({ timeout: 5000 });
+    await btn.click();
     await this.titleInitial.waitForDisplayed({ timeout: 4000 });
     await this.dropzone.expectVisible();
   }
