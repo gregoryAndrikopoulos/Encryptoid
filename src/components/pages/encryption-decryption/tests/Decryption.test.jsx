@@ -136,7 +136,7 @@ describe("Decryption (UI-only)", () => {
     const downloadLink = within(results).getByTestId(
       "decryption.download.decrypted"
     );
-    expect(downloadLink).toHaveAttribute("href", "blob:mock");
+    expect(downloadLink).toHaveAttribute("href", expect.stringMatching(/^blob:/));
     expect(downloadLink).toHaveAttribute(
       "download",
       expect.stringMatching(/\.dec\.txt$/)

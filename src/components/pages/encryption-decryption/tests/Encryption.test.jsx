@@ -121,7 +121,7 @@ describe("Encryption (UI-only)", () => {
 
     // Download link exists and has a filename ending in .enc.txt
     const dl = within(tokenBlock).getByTestId("encryption.download.encrypted");
-    expect(dl).toHaveAttribute("href", "blob:mock");
+    expect(dl).toHaveAttribute("href", expect.stringMatching(/^blob:/));
     expect(dl).toHaveAttribute(
       "download",
       expect.stringMatching(/\.enc\.txt$/)
@@ -200,6 +200,7 @@ describe("Encryption token copy", () => {
   });
 
   afterEach(() => {
+    vi.restoreAllMocks();
     vi.unstubAllGlobals();
   });
 
