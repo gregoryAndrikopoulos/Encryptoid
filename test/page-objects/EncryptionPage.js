@@ -42,6 +42,7 @@ class EncryptionPage {
   }
 
   async open() {
+    await browser.setWindowSize(1400, 900);
     await browser.url("/");
     const link = await $('[data-testid="navlink-encryption"]');
     await link.waitForDisplayed({ timeout: 5000 });
