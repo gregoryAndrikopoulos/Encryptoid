@@ -1,22 +1,22 @@
 import { browser } from "@wdio/globals";
-import NavPage from "../page-objects/NavigationPage.js";
+import NavigationPage from "../page-objects/NavigationPage.js";
 
 describe("Navbar (NavSwitcher + AppLink)", () => {
   it("renders desktop nav and navigates via test-ids", async () => {
     await browser.setWindowSize(1400, 900);
-    await NavPage.open("/");
+    await NavigationPage.open("/");
 
-    await (await NavPage.desktop).waitForDisplayed();
+    await (await NavigationPage.desktop).waitForDisplayed();
 
-    await (await NavPage.logo).waitForDisplayed();
-    const logoSrc = await (await NavPage.logo).getAttribute("src");
+    await (await NavigationPage.logo).waitForDisplayed();
+    const logoSrc = await (await NavigationPage.logo).getAttribute("src");
     if (!String(logoSrc).includes("logo-nav.png")) {
       throw new Error(
         `Expected nav logo src to include "logo-nav.png", got "${logoSrc}"`
       );
     }
 
-    await NavPage.goEncryption();
+    await NavigationPage.goEncryptionDesktop();
     {
       const url = await browser.getUrl();
       if (!url.includes("/Encryption")) {
@@ -24,7 +24,7 @@ describe("Navbar (NavSwitcher + AppLink)", () => {
       }
     }
 
-    await NavPage.goDecryption();
+    await NavigationPage.goDecryptionDesktop();
     {
       const url = await browser.getUrl();
       if (!url.includes("/Decryption")) {
@@ -35,11 +35,11 @@ describe("Navbar (NavSwitcher + AppLink)", () => {
 
   it("renders mobile nav and navigates via test-ids", async () => {
     await browser.setWindowSize(390, 844);
-    await NavPage.open("/Decryption");
+    await NavigationPage.open("/Decryption");
 
-    await (await NavPage.mobile).waitForDisplayed();
+    await (await NavigationPage.mobile).waitForDisplayed();
 
-    await NavPage.goHomeMobile();
+    await NavigationPage.goHomeMobile();
     {
       const url = await browser.getUrl();
       if (!url.endsWith("/")) {
@@ -47,7 +47,7 @@ describe("Navbar (NavSwitcher + AppLink)", () => {
       }
     }
 
-    await NavPage.goEncryption();
+    await NavigationPage.goEncryptionMobile();
     {
       const url = await browser.getUrl();
       if (!url.includes("/Encryption")) {

@@ -1,8 +1,11 @@
-import { $ } from "@wdio/globals";
+import { $, browser } from "@wdio/globals";
 
 class NavigationPage {
   get desktop() {
     return $('[data-testid="nav-desktop"]');
+  }
+  get mobile() {
+    return $('[data-testid="nav-mobile"]');
   }
   get title() {
     return $('[data-testid="nav-title"]');
@@ -10,36 +13,49 @@ class NavigationPage {
   get logo() {
     return $('[data-testid="nav-logo"]');
   }
-  get linkEncryption() {
-    return $('[data-testid="navlink-encryption"]');
+  get desktopEncryptionLink() {
+    return this.desktop.$('[data-testid="navlink-encryption"]');
   }
-  get linkDecryption() {
-    return $('[data-testid="navlink-decryption"]');
+  get desktopDecryptionLink() {
+    return this.desktop.$('[data-testid="navlink-decryption"]');
   }
-  get mobile() {
-    return $('[data-testid="nav-mobile"]');
+  get mobileHomeLink() {
+    return this.mobile.$('[data-testid="navlink-home"]');
   }
-  get linkHomeMobile() {
-    return $('[data-testid="navlink-home"]');
+  get mobileEncryptionLink() {
+    return this.mobile.$('[data-testid="navlink-encryption"]');
+  }
+  get mobileDecryptionLink() {
+    return this.mobile.$('[data-testid="navlink-decryption"]');
   }
 
   async open(path = "/") {
     await browser.url(path);
   }
 
-  async goEncryption() {
-    await (await this.linkEncryption).waitForDisplayed();
-    await (await this.linkEncryption).click();
+  async goEncryptionDesktop() {
+    await this.desktopEncryptionLink.waitForDisplayed();
+    await this.desktopEncryptionLink.click();
   }
 
-  async goDecryption() {
-    await (await this.linkDecryption).waitForDisplayed();
-    await (await this.linkDecryption).click();
+  async goDecryptionDesktop() {
+    await this.desktopDecryptionLink.waitForDisplayed();
+    await this.desktopDecryptionLink.click();
   }
 
   async goHomeMobile() {
-    await (await this.linkHomeMobile).waitForDisplayed();
-    await (await this.linkHomeMobile).click();
+    await this.mobileHomeLink.waitForDisplayed();
+    await this.mobileHomeLink.click();
+  }
+
+  async goEncryptionMobile() {
+    await this.mobileEncryptionLink.waitForDisplayed();
+    await this.mobileEncryptionLink.click();
+  }
+
+  async goDecryptionMobile() {
+    await this.mobileDecryptionLink.waitForDisplayed();
+    await this.mobileDecryptionLink.click();
   }
 }
 
