@@ -13,7 +13,8 @@ const NavDesktop = () => {
           data-testid="nav-logo"
         />
       </Link>
-      <ul data-testid="nav-desktop-list">
+
+      <ul>
         <AppLink to="/Encryption" testId="navlink-encryption">
           Encryption
         </AppLink>
