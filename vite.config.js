@@ -6,8 +6,8 @@ export default defineConfig({
   test: {
     environment: "jsdom",
     setupFiles: ["./src/test-utils/setupUnitTests.js"],
-    globals: true, // use describe/it/expect without imports
+    globals: true,
     include: ["src/**/*.test.{js,jsx,ts,tsx}"],
-    css: true, // allow importing CSS in components
+    css: true,
   },
 });

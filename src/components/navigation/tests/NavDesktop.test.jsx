@@ -36,8 +36,6 @@ describe("NavDesktop", () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByTestId("navlink-encryption")).toHaveStyle({
-      backgroundColor: "var(--color-tint)",
-    });
+    expect(screen.getByTestId("navlink-encryption")).toHaveClass("active");
   });
 });

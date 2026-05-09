@@ -20,7 +20,7 @@ describe("AppLink", () => {
     expect(link).toHaveTextContent("Encryption");
   });
 
-  it("applies active style when route matches", () => {
+  it("applies active state when route matches", () => {
     render(
       <MemoryRouter initialEntries={["/Encryption"]}>
         <AppLink to="/Encryption" testId="test-encryption">
@@ -30,6 +30,6 @@ describe("AppLink", () => {
     );
 
     const link = screen.getByTestId("test-encryption");
-    expect(link).toHaveStyle({ backgroundColor: "var(--color-tint)" });
+    expect(link).toHaveClass("active");
   });
 });

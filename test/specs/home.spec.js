@@ -1,6 +1,6 @@
 import { browser } from "@wdio/globals";
 import HomePage from "../page-objects/HomePage.js";
-import NavPage from "../page-objects/NavigationPage.js";
+import NavigationPage from "../page-objects/NavigationPage.js";
 
 describe("Home screen", () => {
   it("renders header, nav (desktop), and home sections", async () => {
@@ -10,7 +10,7 @@ describe("Home screen", () => {
     await (await HomePage.headerRoot).waitForDisplayed();
     await (await HomePage.headerLogo).waitForDisplayed();
 
-    await (await NavPage.desktop).waitForDisplayed();
+    await (await NavigationPage.desktop).waitForDisplayed();
     await (await HomePage.page).waitForDisplayed();
     await (await HomePage.actionsGrid).waitForDisplayed();
     await (await HomePage.howto).waitForDisplayed();
@@ -93,7 +93,7 @@ describe("Home screen", () => {
       }
     }
 
-    await (await NavPage.title).click();
+    await (await NavigationPage.title).click();
     {
       const url = await browser.getUrl();
       if (!url.endsWith("/")) {
@@ -111,7 +111,7 @@ describe("Home screen", () => {
       }
     }
 
-    await NavPage.goEncryption();
+    await NavigationPage.goEncryptionDesktop();
     {
       const url = await browser.getUrl();
       if (!url.toLowerCase().includes("/encryption")) {

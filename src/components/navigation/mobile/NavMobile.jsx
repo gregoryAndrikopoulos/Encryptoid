@@ -10,21 +10,23 @@ const NavMobile = () => {
   return (
     <nav className="nav-mobile" data-testid="nav-mobile">
       <AppLink to="/" className="nav-mobile-link" testId="navlink-home">
-        <AiOutlineHome aria-label="Home" />
+        <AiOutlineHome />
       </AppLink>
+
       <AppLink
         to="/Encryption"
         className="nav-mobile-link"
         testId="navlink-encryption"
       >
-        <MdOutlineEnhancedEncryption aria-label="Encryption" />
+        <MdOutlineEnhancedEncryption />
       </AppLink>
+
       <AppLink
         to="/Decryption"
         className="nav-mobile-link"
         testId="navlink-decryption"
       >
-        <MdOutlineNoEncryptionGmailerrorred aria-label="Decryption" />
+        <MdOutlineNoEncryptionGmailerrorred />
       </AppLink>
     </nav>
   );
