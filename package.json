@@ -26,19 +26,19 @@
   "dependencies": {
     "busboy": "^1.6.0",
     "cors": "^2.8.6",
-    "express": "^5.2.1",
-    "react": "^19.3.0",
-    "react-dom": "^19.3.0",
+    "express": "^5.3.0",
+    "react": "^19.3.1",
+    "react-dom": "^19.3.1",
     "react-dropzone": "^15.0.0",
     "react-icons": "^5.7.0",
-    "react-router-dom": "^7.18.4",
-    "react-toastify": "11.1.0"
+    "react-router-dom": "^7.18.5",
+    "react-toastify": "11.2.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.4",
     "@testing-library/jest-dom": "^7.0.1",
     "@testing-library/react": "^16.3.3",
-    "@testing-library/user-event": "^14.6.7",
+    "@testing-library/user-event": "^14.6.8",
     "@types/react": "^19.3.0",
     "@types/react-dom": "^19.3.0",
     "@vitejs/plugin-react-swc": "^4.3.3",
@@ -53,12 +53,12 @@
     "eslint-plugin-react": "^7.37.5",
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.7",
-    "globals": "^17.12.0",
+    "globals": "^17.13.0",
     "jsdom": "^29.1.1",
-    "prettier": "^3.9.9",
-    "start-server-and-test": "^3.0.12",
-    "vite": "^8.3.1",
-    "supertest": "^7.3.0",
+    "prettier": "^3.9.10",
+    "start-server-and-test": "^3.0.13",
+    "vite": "^8.3.5",
+    "supertest": "^7.3.1",
     "vitest": "^4.1.11"
   }
 }
